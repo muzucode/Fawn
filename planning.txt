@@ -1,0 +1,18 @@
+Edge proxy server (EPS) listens, acting as the API
+Upstream servers (US) are listening for messages from EPS
+Client sends request to EPS
+EPS routes to US accordingly
+US running its own Gin client
+
+EPS has one gin servers running
+  - Receive request from user, then route that request to US
+    and return the US response to the user
+
+
+User Request ----> EPS ----------------> US ---------------------> EPS -------------------------> User
+=========================  proxy to  ==========  respond to  ============  proxy response to  === 
+
+
+message appears on a port-specific region on the plane
+
+

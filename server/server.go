@@ -2,47 +2,63 @@ package server
 
 import (
 	"fmt"
+	"log"
 	"net"
 )
 
 // Server status
 const (
-	Idle = iota
+	DoNotDisturb = iota
 	Listening
 )
 
 type Server struct {
 	Id          string
 	DisplayName string
-	Port        int
-	Ip          net.IP
+	Addr        string
+	Port        string
 	Status      byte
+	Connection  *net.Conn
 }
 
-func RunServer(address string) {
-	fmt.Printf("Server listening @ %s\n", address)
-	ln, err := net.Listen("tcp", address)
+func (s Server) Run() {
+	fmt.Printf("Server listening @ %s\n", s.Addr)
+	ln, err := net.Listen("tcp", s.Addr)
 	if err != nil {
-		// handle error
+		log.Fatal(err)
 	}
 
 	for {
 		conn, err := ln.Accept()
+		s.Connection = &conn
 		if err != nil {
-			// handle error
+			log.Fatal(err)
 		}
-		go handleConnection(conn)
+		go s.HandleConnection()
 	}
 }
 
-func handleConnection(conn net.Conn) {
+func (s Server) Stop() {
 
-	// Initialize read buf
-	outBuf := make([]byte, 256)
-	// Read data to buffer
-	conn.Read(outBuf)
+}
 
-	defer conn.Close()
+func (s Server) HandleConnection() {
+	conn := *s.Connection
 
-	fmt.Printf("%b\n", outBuf)
+	// DoNotDisturb - Ignore
+	if s.Status == DoNotDisturb {
+		fmt.Println("Sorry, server isn't listening to your BS!")
+		return
+	}
+	// Listening - Read to buffer
+	if s.Status == Listening {
+		buf := make([]byte, 128)
+		_, err := conn.Read(buf)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+	}
+
 }
