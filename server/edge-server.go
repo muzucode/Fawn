@@ -1,8 +1,6 @@
-package edgeserver
+package server
 
 import (
-	"muzucode/goroutines/protocol"
-	serverlist "muzucode/goroutines/server-list"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -22,20 +20,20 @@ func StartServer() {
 		})
 	})
 	r.POST("/servers/:server", func(c *gin.Context) {
-		var msg protocol.Message
+		var msg Message
 		c.BindJSON(&msg)
 		// make post request to upstream server here
 		c.JSON(200, 1)
 	})
 	r.POST("/servers/:server", func(c *gin.Context) {
-		var msg protocol.Message
+		var msg Message
 		c.BindJSON(&msg)
 		// make post request to upstream server here
 		c.JSON(200, 1)
 	})
 	r.DELETE("/servers/:serverId", func(c *gin.Context) {
-		var msg protocol.Message
-		delete(*serverlist.GetInstance(), c.Param("serverId"))
+		var msg Message
+		delete(*sl.GetInstance(), c.Param("serverId"))
 		c.BindJSON(&msg)
 		// make post request to upstream server here
 		c.JSON(200, 1)
