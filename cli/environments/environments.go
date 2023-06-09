@@ -100,6 +100,7 @@ func ListEnvironments(cmd *cobra.Command, args []string) {
 	defer rows.Close()
 
 	fmt.Println("All Environments:")
+	fmt.Println("---------------")
 	for rows.Next() {
 		var environment Environment
 		err := rows.Scan(&environment.Id, &environment.Name, &environment.ApiKey, &environment.DebugMode, &environment.CreatedAt, &environment.UpdatedAt)

@@ -87,6 +87,7 @@ func ListGroups(cmd *cobra.Command, args []string) {
 	defer rows.Close()
 
 	fmt.Println("All Groups:")
+	fmt.Println("---------------")
 	for rows.Next() {
 		var group Group
 		err := rows.Scan(&group.Id, &group.Name, &group.Description, &group.EnvironmentId)
