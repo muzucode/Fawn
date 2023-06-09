@@ -11,10 +11,10 @@ import (
 )
 
 type Group struct {
-	Id            string
+	Id            int
 	Name          string
 	Description   string
-	EnvironmentId string
+	EnvironmentId int
 }
 
 func AddGroup(cmd *cobra.Command, args []string) {
@@ -38,7 +38,7 @@ func AddGroup(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	group.EnvironmentId = "3"
+	group.EnvironmentId = 1
 
 	// Insert the group into the database
 	insertQuery := "INSERT INTO groups (Name, Description, EnvironmentId) VALUES (?, ?, ?)"
@@ -89,13 +89,13 @@ func ListGroups(cmd *cobra.Command, args []string) {
 	fmt.Println("All Groups:")
 	for rows.Next() {
 		var group Group
-		err := rows.Scan(&group.Id, &group.Name, &group.Description)
+		err := rows.Scan(&group.Id, &group.Name, &group.Description, &group.EnvironmentId)
 		if err != nil {
 			log.Printf("Failed to retrieve group information while scanning rows: %v", err)
 			continue
 		}
 
-		fmt.Printf("Id: %s\n", group.Id)
+		fmt.Printf("Id: %d\n", group.Id)
 		fmt.Printf("Name: %s\n", group.Name)
 		fmt.Printf("Description: %s\n", group.Description)
 		fmt.Println("---------------")

@@ -6,18 +6,17 @@ import (
 	"log"
 	db "muzucode/goroutines/database"
 	"os"
-	"time"
 
 	"github.com/spf13/cobra"
 )
 
 type Environment struct {
 	Id        string
-	AppName   string
+	Name      string
 	ApiKey    string
 	DebugMode bool
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	CreatedAt []uint8
+	UpdatedAt []uint8
 }
 
 func AddEnvironment(cmd *cobra.Command, args []string) {
@@ -25,9 +24,9 @@ func AddEnvironment(cmd *cobra.Command, args []string) {
 	var environment Environment
 	scanner := bufio.NewScanner(os.Stdin)
 
-	fmt.Print("Enter App Name: ")
+	fmt.Print("Enter Environment Name: ")
 	if scanner.Scan() {
-		environment.AppName = scanner.Text()
+		environment.Name = scanner.Text()
 	} else {
 		log.Println("Failed to read input:", scanner.Err())
 		return
@@ -55,8 +54,8 @@ func AddEnvironment(cmd *cobra.Command, args []string) {
 	}
 
 	// Insert the environment into the database
-	insertQuery := "INSERT INTO Environments (AppName, ApiKey, DebugMode) VALUES (?, ?, ?)"
-	_, err := db.Db.Exec(insertQuery, environment.AppName, environment.ApiKey, environment.DebugMode)
+	insertQuery := "INSERT INTO Environments (Name, ApiKey, DebugMode) VALUES (?, ?, ?)"
+	_, err := db.Db.Exec(insertQuery, environment.Name, environment.ApiKey, environment.DebugMode)
 	if err != nil {
 		log.Printf("Failed to add environment: %v", err)
 		return
@@ -103,18 +102,18 @@ func ListEnvironments(cmd *cobra.Command, args []string) {
 	fmt.Println("All Environments:")
 	for rows.Next() {
 		var environment Environment
-		err := rows.Scan(&environment.Id, &environment.AppName, &environment.ApiKey, &environment.DebugMode, &environment.CreatedAt, &environment.UpdatedAt)
+		err := rows.Scan(&environment.Id, &environment.Name, &environment.ApiKey, &environment.DebugMode, &environment.CreatedAt, &environment.UpdatedAt)
 		if err != nil {
 			log.Printf("Failed to retrieve environment information while scanning rows: %v", err)
 			continue
 		}
 
 		fmt.Printf("Id: %s\n", environment.Id)
-		fmt.Printf("App Name: %s\n", environment.AppName)
+		fmt.Printf("Environment Name: %s\n", environment.Name)
 		fmt.Printf("API Key: %s\n", environment.ApiKey)
 		fmt.Printf("Debug Mode: %v\n", environment.DebugMode)
-		fmt.Printf("Created At: %v\n", environment.CreatedAt)
-		fmt.Printf("Updated At: %v\n", environment.UpdatedAt)
+		fmt.Printf("Created At: %v\n", string(environment.CreatedAt))
+		fmt.Printf("Updated At: %v\n", string(environment.UpdatedAt))
 		fmt.Println("---------------")
 	}
 }
