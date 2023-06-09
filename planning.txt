@@ -1,3 +1,5 @@
+Fawn SM (Fawn Server Management)
+
 Edge proxy server (EPS) listens, acting as the API
 Upstream servers (US) are listening for messages from EPS
 Client sends request to EPS
@@ -22,3 +24,27 @@ Load server information from database
 Create Servers
 Create SSH connections to USs
 Set each IOStream to a separate file
+
+Design:
+Many environments
+  Environment has servers
+
+
+
+MySQL
+-----
+CREATE TABLE environments (
+  Id VARCHAR(36) PRIMARY KEY,
+  Name VARCHAR(255) NOT NULL,
+  Database VARCHAR(255) NOT NULL,
+  Description VARCHAR(255)
+);
+
+CREATE TABLE servers (
+  ID INT PRIMARY KEY AUTO_INCREMENT,
+  DisplayName VARCHAR(255) NOT NULL,
+  Address VARCHAR(255) NOT NULL,
+  PrivateKeyPath VARCHAR(255) NOT NULL,
+  EnvironmentId VARCHAR(36),
+  FOREIGN KEY (EnvironmentId) REFERENCES environments(Id)
+);
