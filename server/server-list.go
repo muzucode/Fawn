@@ -33,19 +33,19 @@ func FetchUpstreamServers() (ServerList, error) {
 
 	// Create servers
 	s1 := &Server{
-		Id:          "1",
-		DisplayName: "Server-1",
-		Address:     "127.0.0.1",
+		Id:      "1",
+		Name:    "Server-1",
+		Address: "127.0.0.1",
 	}
 	// s2 := &Server{
 	// 	Id:          "1",
-	// 	DisplayName: "Server-1",
+	// 	Name: "Server-1",
 	// 	Address:     "127.0.0.1",
 	// 	Port:        "9823",
 	// }
 	// s3 := &Server{
 	// 	Id:          "1",
-	// 	DisplayName: "Server-1",
+	// 	Name: "Server-1",
 	// 	Address:     "127.0.0.1",
 	// 	Port:        "9823",
 	// }

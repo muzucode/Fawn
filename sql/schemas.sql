@@ -1,0 +1,61 @@
+CREATE TABLE Environments (
+  Id INT AUTO_INCREMENT PRIMARY KEY,
+  Name VARCHAR(255) NOT NULL,
+  ApiKey VARCHAR(255) NOT NULL,
+  DebugMode BOOLEAN NOT NULL,
+  CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Groups (
+  Id INT PRIMARY KEY AUTO_INCREMENT,
+  Name VARCHAR(255) NOT NULL,
+  Description VARCHAR(255),
+  EnvironmentId INT,
+  FOREIGN KEY (EnvironmentId) REFERENCES  Environments(Id)
+);
+
+CREATE TABLE Servers (
+  Id INT PRIMARY KEY AUTO_INCREMENT,
+  DisplayName VARCHAR(255) NOT NULL,
+  Address VARCHAR(255) NOT NULL,
+  PrivateKeyPath VARCHAR(255) NOT NULL,
+  GroupId INT,
+  FOREIGN KEY (GroupId) REFERENCES Groups(Id)
+);
+
+CREATE TABLE Users (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(255),
+    UserConfigId INT,
+    FOREIGN KEY (UserConfigId) REFERENCES UserConfig(Id),
+    PasswordId VARCHAR(255),
+    FOREIGN KEY (PasswordId) REFERENCES Passwords(Id)
+);
+
+CREATE TABLE UserConfig (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    UserThemeId VARCHAR(255),
+    FOREIGN KEY (UserThemeId) REFERENCES UserThemes(Id)
+);
+
+CREATE TABLE UserThemes (
+    Id VARCHAR(255) PRIMARY KEY,
+    ColorPaletteId INT,
+    FOREIGN KEY (ColorPaletteId) REFERENCES ColorPalettes(Id)
+);
+
+CREATE TABLE ColorPalettes (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    PrimaryColor VARCHAR(6),
+    SecondaryColor VARCHAR(6),
+    TertiaryColor VARCHAR(6),
+    QuaternaryColor VARCHAR(6)
+);
+
+CREATE TABLE Passwords (
+    Id INT PRIMARY KEY AUTO_INCREMENT,
+    Salt VARCHAR(255),
+    HashingAlgorihm VARCHAR(255),
+    Hash VARCHAR(255)
+)

@@ -8,7 +8,7 @@ import (
 
 type Server struct {
 	Id            string
-	DisplayName   string
+	Name          string
 	Address       string
 	SSH           *SSH
 	EnvironmentId string
