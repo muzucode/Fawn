@@ -7,19 +7,19 @@ import (
 )
 
 type Server struct {
-	Id            string
-	Name          string
-	Description   string
-	Address       string
-	SSH           *SSH
-	EnvironmentId string
+	Id             int
+	Name           string
+	Description    string
+	Address        string
+	PrivateKeyPath string
+	SSH            *SSH
+	GroupId        string
 }
 
 type SSH struct {
-	Client         *ssh.Client
-	Session        *ssh.Session
-	Stdin          *os.File
-	Stdout         *os.File
-	Stderr         *os.File
-	PrivateKeyPath string
+	Client  *ssh.Client
+	Session *ssh.Session
+	Stdin   *os.File
+	Stdout  *os.File
+	Stderr  *os.File
 }

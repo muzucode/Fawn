@@ -11,48 +11,51 @@ import (
 
 // Load all commands
 func LoadServerCommands(rootCmd *cobra.Command) {
-	envCmd := &cobra.Command{
-		Use:   "env",
-		Short: "Manage environments",
+	serverCmd := &cobra.Command{
+		Use:   "server",
+		Short: "Manage servers",
 	}
-	rootCmd.AddCommand(envCmd)
+	rootCmd.AddCommand(serverCmd)
 
 	addCmd := &cobra.Command{
 		Use:   "add",
-		Short: "Add an server",
+		Short: "Add a server",
 		Run:   AddServerCommand,
 	}
-	envCmd.AddCommand(addCmd)
+	serverCmd.AddCommand(addCmd)
 
 	deleteCmd := &cobra.Command{
 		Use:   "delete",
-		Short: "Delete an server",
+		Short: "Delete a server",
 		Run:   DeleteServerCommand,
 	}
-	envCmd.AddCommand(deleteCmd)
+	serverCmd.AddCommand(deleteCmd)
 
 	listCmd := &cobra.Command{
 		Use:   "list",
-		Short: "List all environments",
+		Short: "List all servers",
 		Run:   ListServersCommand,
 	}
-	envCmd.AddCommand(listCmd)
-
-	defaultCmd := &cobra.Command{
-		Use:   "default",
-		Short: "Print the default server",
-		Run:   GetDefaultServerCommand,
-	}
-	envCmd.AddCommand(defaultCmd)
+	serverCmd.AddCommand(listCmd)
 
 }
 
 // Commands
 func AddServerCommand(cmd *cobra.Command, args []string) {
 	// Prompt the user for server details
-	var server Server
+	var server *Server
 	scanner := bufio.NewScanner(os.Stdin)
 
+	// GroupId
+	fmt.Print("Enter Id of group to add server to: ")
+	if scanner.Scan() {
+		server.GroupId = scanner.Text()
+	} else {
+		log.Println("Failed to read input:", scanner.Err())
+		return
+	}
+
+	// Name
 	fmt.Print("Enter Server Name: ")
 	if scanner.Scan() {
 		server.Name = scanner.Text()
@@ -61,22 +64,26 @@ func AddServerCommand(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	fmt.Print("Enter API Key: ")
+	// Description
+	fmt.Print("Enter Server Description: ")
 	if scanner.Scan() {
-		server.ApiKey = scanner.Text()
+		server.Description = scanner.Text()
 	} else {
 		log.Println("Failed to read input:", scanner.Err())
 		return
 	}
-
-	fmt.Print("Enter Debug Mode (true/false): ")
+	// Address
+	fmt.Print("Enter Server Description: ")
 	if scanner.Scan() {
-		debugMode := scanner.Text()
-		if debugMode == "true" || debugMode == "1" {
-			server.DebugMode = true
-		} else {
-			server.DebugMode = false
-		}
+		server.Description = scanner.Text()
+	} else {
+		log.Println("Failed to read input:", scanner.Err())
+		return
+	}
+	// PrivateKeyPath
+	fmt.Print("Enter path to private key: ")
+	if scanner.Scan() {
+		server.Description = scanner.Text()
 	} else {
 		log.Println("Failed to read input:", scanner.Err())
 		return
@@ -89,16 +96,16 @@ func AddServerCommand(cmd *cobra.Command, args []string) {
 
 func DeleteServerCommand(cmd *cobra.Command, args []string) {
 	// Prompt the user for the server Id
-	var environmentId int
+	var serverId int
 
 	fmt.Print("Enter Server Id: ")
-	_, err := fmt.Scanf("%d", &environmentId)
+	_, err := fmt.Scanf("%d", &serverId)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// Delete the server from the database
-	DeleteOne(environmentId)
+	DeleteOne(serverId)
 }
 func ListServersCommand(cmd *cobra.Command, args []string) {
 	rows, err := FindAll()
@@ -113,35 +120,18 @@ func ListServersCommand(cmd *cobra.Command, args []string) {
 	fmt.Println("---------------")
 	for rows.Next() {
 		var server Server
-		err := rows.Scan(&server.Id, &server.Name, &server.ApiKey, &server.DebugMode, &server.Position, &server.CreatedAt, &server.UpdatedAt)
+		err := rows.Scan(&server.Id, &server.Name, &server.Description, &server.Address, &server.PrivateKeyPath, &server.GroupId)
 		if err != nil {
 			log.Printf("Failed to retrieve server information while scanning rows: %v", err)
 			continue
 		}
 
 		fmt.Printf("Id: %d\n", server.Id)
-		fmt.Printf("Server Name: %s\n", server.Name)
-		fmt.Printf("API Key: %s\n", server.ApiKey)
-		fmt.Printf("Position: %d\n", server.Position)
-		fmt.Printf("Debug Mode: %v\n", server.DebugMode)
-		fmt.Printf("Created At: %v\n", string(server.CreatedAt))
-		fmt.Printf("Updated At: %v\n", string(server.UpdatedAt))
+		fmt.Printf("Name: %s\n", server.Name)
+		fmt.Printf("Description: %s\n", server.Description)
+		fmt.Printf("Address: %s\n", server.Address)
+		fmt.Printf("Private Key Path: %v\n", server.PrivateKeyPath)
+		fmt.Printf("Group Id: %v\n", string(server.GroupId))
 		fmt.Println("---------------")
 	}
-}
-func GetDefaultServerCommand(cmd *cobra.Command, args []string) {
-	server, err := FindDefault()
-	if err != nil {
-		fmt.Println("Failed at GetDefaultServerCommand")
-		log.Fatal(err)
-	}
-
-	fmt.Printf("Id: %d\n", server.Id)
-	fmt.Printf("Server Name: %s\n", server.Name)
-	fmt.Printf("API Key: %s\n", server.ApiKey)
-	fmt.Printf("Position: %d\n", server.Position)
-	fmt.Printf("Debug Mode: %v\n", server.DebugMode)
-	fmt.Printf("Created At: %v\n", string(server.CreatedAt))
-	fmt.Printf("Updated At: %v\n", string(server.UpdatedAt))
-	fmt.Println("---------------")
 }

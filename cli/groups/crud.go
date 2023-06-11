@@ -19,6 +19,9 @@ func CreateOne(group *Group) {
 
 	fmt.Println("Group added successfully.")
 }
+func FindOne(groupId int) {
+
+}
 func FindAll() (*sql.Rows, error) {
 
 	// Retrieve all groups from the database
