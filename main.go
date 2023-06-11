@@ -2,9 +2,9 @@ package main
 
 import (
 	"log"
-	"muzucode/goroutines/cli/environments"
-	"muzucode/goroutines/cli/groups"
 	db "muzucode/goroutines/database"
+	"muzucode/goroutines/environments"
+	"muzucode/goroutines/groups"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"

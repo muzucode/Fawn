@@ -1,4 +1,4 @@
-package cli
+package users
 
 import (
 	"database/sql"
@@ -7,11 +7,11 @@ import (
 	db "muzucode/goroutines/database"
 )
 
-func CreateOne(server *Server) {
+func CreateOne(user *User) {
 
 	// Insert the group into the database
 	insertQuery := "INSERT INTO Servers (Name, Description, Address, PrivateKeyPath, GroupId) VALUES (?, ?, ?, ?, ?)"
-	_, err := db.Db.Exec(insertQuery, server.Name, server.Description, server.Address, server.PrivateKeyPath, server.GroupId)
+	_, err := db.Db.Exec(insertQuery, user.Name, user.Description, server.Address, server.PrivateKeyPath, server.GroupId)
 	if err != nil {
 		log.Printf("Failed to add group: %v", err)
 		return

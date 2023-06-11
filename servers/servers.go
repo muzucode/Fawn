@@ -1,4 +1,4 @@
-package cli
+package servers
 
 import (
 	"os"
