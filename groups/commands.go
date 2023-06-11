@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"log"
-	"muzucode/goroutines/environments"
+	"muzucode/fawn/environments"
 	"os"
 
 	"github.com/spf13/cobra"

@@ -1,4 +1,4 @@
-module muzucode/goroutines
+module muzucode/fawn
 
 go 1.20
 

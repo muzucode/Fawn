@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	db "muzucode/goroutines/database"
+	db "muzucode/fawn/database"
 )
 
 func CreateOne(server *Server) {
