@@ -1,6 +1,6 @@
 # Fawn
 
-A server management solution.  Similar to cPanel and CloudPanel, but open source and free.
+A server management solution.  Similar to cPanel and CloudPanel, but open-source and comes with a CLI.  Meant to be run locally!
 
 A way for me to practice Go, SQL, and general software development.
 
@@ -11,6 +11,6 @@ A way for me to practice Go, SQL, and general software development.
 
 General app design.
 
-### SQL
+### MySQL
 
 Databasing, schema design.
