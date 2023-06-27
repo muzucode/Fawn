@@ -21,13 +21,13 @@ message appears on a port-specific region on the plane
 ---------------------
 Order of operations:
 Load server information from database
-Create Servers
-Create SSH connections to USs
+Create SSH connections to servers
 Set each IOStream to a separate file
 
 Design:
-Many environments
-  Environment has servers
+environments
+  -groups
+    -servers
 
 
 

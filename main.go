@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	db "muzucode/fawn/database"
+	edge_api "muzucode/fawn/edge-api"
 	"muzucode/fawn/environments"
 	"muzucode/fawn/groups"
 
@@ -32,9 +33,11 @@ func main() {
 	groups.LoadGroupCommands(rootCmd)
 	environments.LoadEnvironmentCommands(rootCmd)
 
-	//
+	// Handle root command run
+	// if err := rootCmd.Execute(); err != nil {
+	// 	log.Fatalf("Failed to execute command: %v", err)
+	// }
 
-	if err := rootCmd.Execute(); err != nil {
-		log.Fatalf("Failed to execute command: %v", err)
-	}
+	// Run Proxy API
+	edge_api.StartEdgeAPI()
 }

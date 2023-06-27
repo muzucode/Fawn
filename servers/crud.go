@@ -13,11 +13,11 @@ func CreateOne(server *Server) {
 	insertQuery := "INSERT INTO Servers (Name, Description, Address, PrivateKeyPath, GroupId) VALUES (?, ?, ?, ?, ?)"
 	_, err := db.Db.Exec(insertQuery, server.Name, server.Description, server.Address, server.PrivateKeyPath, server.GroupId)
 	if err != nil {
-		log.Printf("Failed to add group: %v", err)
+		log.Printf("Failed to add server: %v", err)
 		return
 	}
 
-	fmt.Println("Group added successfully.")
+	fmt.Println("Server added successfully.")
 }
 
 func FindOne(serverId int) (*Server, error) {
@@ -31,17 +31,17 @@ func FindOne(serverId int) (*Server, error) {
 }
 func FindAll() (*sql.Rows, error) {
 
-	// Retrieve all groups from the database
-	fmt.Println("Getting all groups...")
+	// Retrieve all servers from the database
+	fmt.Println("Getting all servers...")
 
-	selectQuery := "SELECT * FROM Groups"
+	selectQuery := "SELECT * FROM Servers"
 	rows, err := db.Db.Query(selectQuery)
 
 	return rows, err
 }
 func FindAllByGroupId(groupId int) (*sql.Rows, error) {
 
-	// Retrieve all groups from the database
+	// Retrieve all servers from the database
 	fmt.Println("Getting all servers in group...")
 
 	selectQuery := "SELECT * FROM Servers WHERE GroupId = ?"

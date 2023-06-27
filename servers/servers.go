@@ -7,13 +7,15 @@ import (
 )
 
 type Server struct {
-	Id             int
-	Name           string
-	Description    string
-	Address        string
-	PrivateKeyPath string
-	SSH            *SSH
-	GroupId        string
+	Id                  int
+	Name                string
+	Address             string
+	Description         string
+	DistributionName    string
+	DistributionVersion string
+	PrivateKeyPath      string
+	SSH                 *SSH
+	GroupId             string
 }
 
 type SSH struct {
