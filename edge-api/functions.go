@@ -20,15 +20,18 @@ func FindAllServers() ([]servers.Server, error) {
 		err := rows.Scan(
 			&s.Id,
 			&s.Name,
-			&s.Description,
 			&s.Address,
 			&s.PrivateKeyPath,
 			&s.GroupId,
+			&s.Description,
+			&s.DistributionName,
+			&s.DistributionVersion,
 		)
 		if err != nil {
 			fmt.Printf("%v\n", err)
 			return nil, err
 		}
+
 		data = append(data, s)
 	}
 

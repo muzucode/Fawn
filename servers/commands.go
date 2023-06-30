@@ -93,7 +93,6 @@ func AddServerCommand(cmd *cobra.Command, args []string) {
 
 	CreateOne(server)
 }
-
 func DeleteServerCommand(cmd *cobra.Command, args []string) {
 	// Prompt the user for the server Id
 	var serverId int
@@ -120,7 +119,16 @@ func ListServersCommand(cmd *cobra.Command, args []string) {
 	fmt.Println("---------------")
 	for rows.Next() {
 		var server Server
-		err := rows.Scan(&server.Id, &server.Name, &server.Description, &server.Address, &server.PrivateKeyPath, &server.GroupId)
+		err := rows.Scan(
+			&server.Id,
+			&server.Name,
+			&server.Address,
+			&server.PrivateKeyPath,
+			&server.GroupId,
+			&server.Description,
+			&server.DistributionName,
+			&server.DistributionVersion,
+		)
 		if err != nil {
 			log.Printf("Failed to retrieve server information while scanning rows: %v", err)
 			continue

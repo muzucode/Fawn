@@ -14,7 +14,7 @@ type Server struct {
 	DistributionName    string
 	DistributionVersion string
 	PrivateKeyPath      string
-	SSH                 *SSH
+	SSH                 *SSH // not stored in DB
 	GroupId             string
 }
 

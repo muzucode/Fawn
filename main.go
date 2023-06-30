@@ -6,6 +6,7 @@ import (
 	edge_api "muzucode/fawn/edge-api"
 	"muzucode/fawn/environments"
 	"muzucode/fawn/groups"
+	"muzucode/fawn/servers"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
@@ -32,6 +33,7 @@ func main() {
 	// Load commands
 	groups.LoadGroupCommands(rootCmd)
 	environments.LoadEnvironmentCommands(rootCmd)
+	servers.LoadServerCommands(rootCmd)
 
 	// Handle root command run
 	// if err := rootCmd.Execute(); err != nil {
