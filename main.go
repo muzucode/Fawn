@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	db "muzucode/fawn/database"
 	edge_api "muzucode/fawn/edge-api"
@@ -14,12 +15,15 @@ import (
 )
 
 func main() {
-
 	// Load .env file vars
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// Parse command-line flags
+	apiFlag := flag.Bool("server", false, "Start the API server")
+	flag.Parse()
 
 	// Connect to DB
 	db.ConnectToDatabase()
@@ -35,11 +39,13 @@ func main() {
 	environments.LoadEnvironmentCommands(rootCmd)
 	servers.LoadServerCommands(rootCmd)
 
-	// Handle root command run
-	// if err := rootCmd.Execute(); err != nil {
-	// 	log.Fatalf("Failed to execute command: %v", err)
-	// }
-
-	// Run Proxy API
-	edge_api.StartEdgeAPI()
+	// Check the flag value and run the appropriate code
+	if *apiFlag {
+		edge_api.StartEdgeAPI()
+	} else {
+		// Handle root command run
+		if err := rootCmd.Execute(); err != nil {
+			log.Fatalf("Failed to execute command: %v", err)
+		}
+	}
 }
