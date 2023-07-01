@@ -11,7 +11,7 @@ func CreateOne(server *Server) {
 
 	// Insert the group into the database
 	insertQuery := "INSERT INTO Servers (Name, Description, Address, PrivateKeyPath, GroupId) VALUES (?, ?, ?, ?, ?)"
-	_, err := db.Db.Exec(insertQuery, server.Name, server.Description, server.Address, server.PrivateKeyPath, server.GroupId)
+	_, err := db.Db.Exec(insertQuery, server.Name, server.Description, server.AddressIPv4, server.AddressIPv6, server.PrivateKeyPath, server.GroupId)
 	if err != nil {
 		log.Printf("Failed to add server: %v", err)
 		return
@@ -25,7 +25,7 @@ func FindOne(serverId int) (*Server, error) {
 	selectQuery := "SELECT * FROM Servers WHERE Id = ?"
 	row := db.Db.QueryRow(selectQuery, serverId)
 
-	err := row.Scan(&server.Id, &server.Name, &server.Description, &server.Address, &server.PrivateKeyPath, &server.GroupId)
+	err := row.Scan(&server.Id, &server.Name, &server.Description, &server.AddressIPv4, &server.AddressIPv6, &server.PrivateKeyPath, &server.GroupId)
 
 	return &server, err
 }

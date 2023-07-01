@@ -122,7 +122,8 @@ func ListServersCommand(cmd *cobra.Command, args []string) {
 		err := rows.Scan(
 			&server.Id,
 			&server.Name,
-			&server.Address,
+			&server.AddressIPv4,
+			&server.AddressIPv6,
 			&server.PrivateKeyPath,
 			&server.GroupId,
 			&server.Description,
@@ -137,7 +138,8 @@ func ListServersCommand(cmd *cobra.Command, args []string) {
 		fmt.Printf("Id: %d\n", server.Id)
 		fmt.Printf("Name: %s\n", server.Name)
 		fmt.Printf("Description: %s\n", server.Description)
-		fmt.Printf("Address: %s\n", server.Address)
+		fmt.Printf("IPv4 Address: %s\n", server.AddressIPv4)
+		fmt.Printf("IPv6 Address: %s\n", server.AddressIPv6)
 		fmt.Printf("Private Key Path: %v\n", server.PrivateKeyPath)
 		fmt.Printf("Group Id: %v\n", string(server.GroupId))
 		fmt.Println("---------------")

@@ -9,7 +9,8 @@ import (
 type Server struct {
 	Id                  int
 	Name                string
-	Address             string
+	AddressIPv4         string
+	AddressIPv6         string
 	Description         string
 	DistributionName    string
 	DistributionVersion string

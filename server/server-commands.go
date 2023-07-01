@@ -18,9 +18,9 @@ func ServerTest() (ServerList, error) {
 
 	// Create servers
 	s1 := &servers.Server{
-		Id:      1,
-		Name:    "Jungle",
-		Address: os.Getenv("HOST_IP"),
+		Id:          1,
+		Name:        "Jungle",
+		AddressIPv4: os.Getenv("HOST_IP"),
 		SSH: &servers.SSH{
 			Stdout: os.Stdout,
 			Stderr: os.Stderr,
@@ -46,7 +46,7 @@ func ServerTest() (ServerList, error) {
 	}
 
 	// Connect to the SSH server
-	conn, err := ssh.Dial("tcp", fmt.Sprintf("%s:%d", s1.Address, port), sshConfig)
+	conn, err := ssh.Dial("tcp", fmt.Sprintf("%s:%d", s1.AddressIPv4, port), sshConfig)
 	if err != nil {
 		log.Fatalf("Failed to connect to SSH server: %v", err)
 	}
