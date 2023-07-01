@@ -2,7 +2,10 @@ package edge_api
 
 import (
 	"fmt"
+	"muzucode/fawn/server"
 	"muzucode/fawn/servers"
+
+	"github.com/gin-gonic/gin"
 )
 
 func FindAllServers() ([]servers.Server, error) {
@@ -47,4 +50,30 @@ func FindOneServer(serverId int) (servers.Server, error) {
 	}
 
 	return *s, nil
+}
+
+func GetFilesFromServer(c *gin.Context) ([]string, error) {
+	var s servers.Server
+
+	// Convert param string to int
+	serverId := toInt(c.Param("serverId"))
+
+	// Find a server
+	s, err := FindOneServer(serverId)
+	if err != nil {
+		return nil, err
+	}
+
+	// Get files in given directory for the given server
+	var files []string
+	files, err = server.GetFilesInDir(s, "/")
+	for i := 0; i < len(files); i++ {
+		fmt.Println(files[i])
+	}
+	// Handle error
+	if err != nil {
+		return nil, err
+	}
+
+	return files, err
 }

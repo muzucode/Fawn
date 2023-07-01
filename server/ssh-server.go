@@ -1,24 +1,23 @@
 package server
 
 import (
+	"bytes"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"muzucode/fawn/servers"
 	"os"
 	"time"
 
 	"golang.org/x/crypto/ssh"
 )
 
-func ConnectUsingSSH() {
+func ConnectUsingSSH(s servers.Server) (*ssh.Session, error) {
 	// SSH connection configuration
-	host := "your_host"
 	port := 22
-	user := "your_username"
-	privateKeyPath := "path_to_private_key"
 
 	// Read the private key file
-	key, err := ioutil.ReadFile(privateKeyPath)
+	key, err := ioutil.ReadFile(s.PrivateKeyPath)
 	if err != nil {
 		log.Fatalf("Failed to read private key file: %v", err)
 	}
@@ -31,7 +30,7 @@ func ConnectUsingSSH() {
 
 	// SSH client configuration
 	config := &ssh.ClientConfig{
-		User: user,
+		User: "ubuntu",
 		Auth: []ssh.AuthMethod{
 			ssh.PublicKeys(signer),
 		},
@@ -40,7 +39,7 @@ func ConnectUsingSSH() {
 	}
 
 	// Connect to the SSH server
-	conn, err := ssh.Dial("tcp", fmt.Sprintf("%s:%d", host, port), config)
+	conn, err := ssh.Dial("tcp", fmt.Sprintf("%s:%d", s.AddressIPv4, port), config)
 	if err != nil {
 		log.Fatalf("Failed to connect to SSH server: %v", err)
 	}
@@ -51,19 +50,48 @@ func ConnectUsingSSH() {
 	if err != nil {
 		log.Fatalf("Failed to create SSH session: %v", err)
 	}
-	defer session.Close()
 
 	// Set up IO streams for session
 	session.Stdout = os.Stdout
 	session.Stderr = os.Stderr
 
-	// Execute a command on the remote server
+	return session, err
+
+}
+
+func GetFilesInDir(s servers.Server, dirPath string) ([]string, error) {
+	session, err := ConnectUsingSSH(s)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer session.Close()
+
+	// Execute list files command
 	cmd := "ls -al"
 	output, err := session.CombinedOutput(cmd)
+
+	// Handle errors
 	if err != nil {
-		log.Fatalf("Failed to execute command: %v", err)
+		fmt.Printf("Failed to execute command: %v\n", err)
+		return nil, err
 	}
 
+	// Print the command output
 	fmt.Println("Command output:")
 	fmt.Println(string(output))
+
+	// Split by new line
+	var files [][]byte
+	var filesStrArr []string
+	files = bytes.Split(output, []byte("\n"))
+
+	// Add to array of strings
+	for i := 0; i < len(files); i++ {
+		// Log each file
+		fmt.Printf("Fetched file %d:\n", i)
+		fmt.Println(string(files[i]))
+		filesStrArr = append(filesStrArr, string(files[i])) // Append to string array
+	}
+
+	return filesStrArr, nil
 }
