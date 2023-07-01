@@ -38,3 +38,13 @@ func FindAllServers() ([]servers.Server, error) {
 
 	return data, nil
 }
+
+func FindOneServer(serverId int) (servers.Server, error) {
+	s, err := servers.FindOne(serverId)
+	if err != nil {
+		fmt.Printf("%v\n", err)
+		return servers.Server{}, err
+	}
+
+	return *s, nil
+}

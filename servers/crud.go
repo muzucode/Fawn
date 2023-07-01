@@ -21,13 +21,23 @@ func CreateOne(server *Server) {
 }
 
 func FindOne(serverId int) (*Server, error) {
-	var server Server
+	var s Server
 	selectQuery := "SELECT * FROM Servers WHERE Id = ?"
 	row := db.Db.QueryRow(selectQuery, serverId)
 
-	err := row.Scan(&server.Id, &server.Name, &server.Description, &server.AddressIPv4, &server.AddressIPv6, &server.PrivateKeyPath, &server.GroupId)
+	err := row.Scan(
+		&s.Id,
+		&s.Name,
+		&s.AddressIPv4,
+		&s.PrivateKeyPath,
+		&s.GroupId,
+		&s.Description,
+		&s.DistributionName,
+		&s.DistributionVersion,
+		&s.AddressIPv6,
+	)
 
-	return &server, err
+	return &s, err
 }
 func FindAll() (*sql.Rows, error) {
 
