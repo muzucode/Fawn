@@ -41,12 +41,12 @@ func StartEdgeAPI() {
 	})
 
 	r.GET("/servers/:serverId/files", func(c *gin.Context) {
-
 		files, err := GetFilesFromServer(c)
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{
-				"error": err,
-			})
+			log.Fatal(err)
+			// c.JSON(http.StatusUnauthorized, gin.H{
+			// 	"error": err,
+			// })
 		}
 
 		// Return data

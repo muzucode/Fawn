@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 	"muzucode/fawn/servers"
-	"os"
 	"time"
 
 	"golang.org/x/crypto/ssh"
@@ -30,7 +29,7 @@ func ConnectUsingSSH(s servers.Server) (*ssh.Session, error) {
 
 	// SSH client configuration
 	config := &ssh.ClientConfig{
-		User: "ubuntu",
+		User: "sean",
 		Auth: []ssh.AuthMethod{
 			ssh.PublicKeys(signer),
 		},
@@ -39,21 +38,16 @@ func ConnectUsingSSH(s servers.Server) (*ssh.Session, error) {
 	}
 
 	// Connect to the SSH server
-	conn, err := ssh.Dial("tcp", fmt.Sprintf("%s:%d", s.AddressIPv4, port), config)
+	client, err := ssh.Dial("tcp", fmt.Sprintf("%s:%d", s.AddressIPv4, port), config)
 	if err != nil {
 		log.Fatalf("Failed to connect to SSH server: %v", err)
 	}
-	defer conn.Close()
 
 	// Create a new SSH session
-	session, err := conn.NewSession()
+	session, err := client.NewSession()
 	if err != nil {
 		log.Fatalf("Failed to create SSH session: %v", err)
 	}
-
-	// Set up IO streams for session
-	session.Stdout = os.Stdout
-	session.Stderr = os.Stderr
 
 	return session, err
 
@@ -64,10 +58,10 @@ func GetFilesInDir(s servers.Server, dirPath string) ([]string, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer session.Close()
+	// defer session.Close()
 
 	// Execute list files command
-	cmd := "ls -al"
+	cmd := `"ls"`
 	output, err := session.CombinedOutput(cmd)
 
 	// Handle errors
@@ -86,7 +80,7 @@ func GetFilesInDir(s servers.Server, dirPath string) ([]string, error) {
 	files = bytes.Split(output, []byte("\n"))
 
 	// Add to array of strings
-	for i := 0; i < len(files); i++ {
+	for i := 0; i < len(files)-1; i++ {
 		// Log each file
 		fmt.Printf("Fetched file %d:\n", i)
 		fmt.Println(string(files[i]))
