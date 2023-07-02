@@ -61,7 +61,7 @@ func GetFilesInDir(s servers.Server, dirPath string) ([]string, error) {
 	// defer session.Close()
 
 	// Execute list files command
-	cmd := `"ls"`
+	cmd := "ls -a"
 	output, err := session.CombinedOutput(cmd)
 
 	// Handle errors
