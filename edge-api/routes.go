@@ -3,6 +3,7 @@ package edge_api
 import (
 	"log"
 	"muzucode/fawn/server"
+	"muzucode/fawn/servers"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -53,11 +54,19 @@ func StartEdgeAPI() {
 		c.JSON(http.StatusOK, files)
 	})
 
-	r.POST("/servers/:server", func(c *gin.Context) {
-		var msg server.Message
-		c.BindJSON(&msg)
-		// make post request to upstream server here
-		c.JSON(200, 1)
+	r.POST("/servers", func(c *gin.Context) {
+		var data *servers.Server
+		c.BindJSON(&data)
+		err := InsertOneServer(data)
+
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"error": err,
+			})
+		} else {
+			c.JSON(http.StatusOK, 1)
+		}
+
 	})
 
 	// GET - Test

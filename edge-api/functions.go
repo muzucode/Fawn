@@ -77,3 +77,11 @@ func GetFilesFromServer(c *gin.Context) ([]string, error) {
 
 	return files, err
 }
+
+func InsertOneServer(server *servers.Server) error {
+	err := servers.InsertOne(server)
+	if err != nil {
+		return err
+	}
+	return nil
+}

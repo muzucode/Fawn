@@ -7,17 +7,18 @@ import (
 	db "muzucode/fawn/database"
 )
 
-func CreateOne(server *Server) {
-
+func InsertOne(server *Server) error {
+	fmt.Printf("%+v\n", server)
 	// Insert the group into the database
-	insertQuery := "INSERT INTO Servers (Name, Description, Address, PrivateKeyPath, GroupId) VALUES (?, ?, ?, ?, ?)"
-	_, err := db.Db.Exec(insertQuery, server.Name, server.Description, server.AddressIPv4, server.AddressIPv6, server.PrivateKeyPath, server.GroupId)
+	insertQuery := "INSERT INTO Servers (Name, AddressIPv4, PrivateKeyPath, GroupId, Description, DistributionName, DistributionVersion) VALUES (?, ?, ?, ?, ?, ?, ?)"
+	_, err := db.Db.Exec(insertQuery, server.Name, server.AddressIPv4, server.PrivateKeyPath, server.GroupId, server.Description, server.DistributionName, server.DistributionVersion)
 	if err != nil {
 		log.Printf("Failed to add server: %v", err)
-		return
+		return err
 	}
 
 	fmt.Println("Server added successfully.")
+	return nil
 }
 
 func FindOne(serverId int) (*Server, error) {

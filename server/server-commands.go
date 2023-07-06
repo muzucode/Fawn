@@ -21,10 +21,6 @@ func ServerTest() (ServerList, error) {
 		Id:          1,
 		Name:        "Jungle",
 		AddressIPv4: os.Getenv("HOST_IP"),
-		SSH: &servers.SSH{
-			Stdout: os.Stdout,
-			Stderr: os.Stderr,
-		},
 	}
 
 	// Read the private key file

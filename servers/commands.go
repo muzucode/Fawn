@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/spf13/cobra"
 )
@@ -49,7 +50,9 @@ func AddServerCommand(cmd *cobra.Command, args []string) {
 	// GroupId
 	fmt.Print("Enter Id of group to add server to: ")
 	if scanner.Scan() {
-		server.GroupId = scanner.Text()
+		input := scanner.Text()
+		num, _ := strconv.Atoi(input)
+		server.GroupId = num
 	} else {
 		log.Println("Failed to read input:", scanner.Err())
 		return
@@ -91,7 +94,7 @@ func AddServerCommand(cmd *cobra.Command, args []string) {
 
 	// Insert the server into the database
 
-	CreateOne(server)
+	InsertOne(server)
 }
 func DeleteServerCommand(cmd *cobra.Command, args []string) {
 	// Prompt the user for the server Id
